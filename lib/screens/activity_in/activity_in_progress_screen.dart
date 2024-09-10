@@ -1,10 +1,10 @@
-import 'package:fitness/screens/activity_summary_screen/activity_summary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class ActivityInProgressScreen extends StatefulWidget {
   final String activity;
