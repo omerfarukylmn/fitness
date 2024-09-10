@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:fitness/screens/activity_in/activity_in_progress_screen.dart';
 
-
 class ActivityScreen extends StatefulWidget {
   @override
   _ActivityScreenState createState() => _ActivityScreenState();
@@ -28,11 +27,13 @@ class _ActivityScreenState extends State<ActivityScreen> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (countdown == 0) {
         timer.cancel();
+
+        // Geri sayım bittiğinde yeni ekrana geçiş yapılıyor:
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ActivityInProgressScreen(
-              activity: selectedActivity,
+              activity: selectedActivity, // Seçilen aktiviteyi geçiriyoruz
             ),
           ),
         );

@@ -1,142 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+// ignore: must_be_immutable
 class ActivitySummaryScreen extends StatelessWidget {
+  late String activityId; // Firestore'dan veri almak için gerekli olan aktivite ID'si
+  late Duration elapsedTime; // Aktivite süresi
+
+  ActivitySummaryScreen({required this.activityId, required this.elapsedTime});
+
+  Future<Map<String, dynamic>> _fetchActivityData() async {
+    try {
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('activities')
+          .doc(activityId)
+          .get();
+
+      if (doc.exists) {
+        return doc.data() as Map<String, dynamic>;
+      } else {
+        throw Exception('Aktivite bulunamadı');
+      }
+    } catch (e) {
+      print('Aktivite verileri alınırken hata oluştu: $e');
+      throw e;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Activity Summary'),
-        backgroundColor: Colors.teal[600],
+        title: Text('Aktivite Özeti'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Activity Summary',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.teal[800],
-              ),
-            ),
-            SizedBox(height: 16),
-            _buildSummaryStat('Time', '15:23'),
-            _buildSummaryStat('Distance', '3.5 km'),
-            _buildSummaryStat('Calories', '250 kcal'),
-            SizedBox(height: 20),
-            _buildSummaryGraph(),
-            SizedBox(height: 20),
-            _buildMotivationalQuote(),
-            SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/profile');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: _fetchActivityData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Hata: ${snapshot.error}'));
+          }
+
+          if (!snapshot.hasData || snapshot.data == null) {
+            return Center(child: Text('Veri mevcut değil'));
+          }
+
+          final data = snapshot.data!;
+          final activity = data['activity'];
+          final distance = data['distance'];
+          final formattedTime = _formatDuration(elapsedTime);
+
+          return Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Aktivite: $activity',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                child: Text('Back to Profile'),
-              ),
+                SizedBox(height: 16),
+                Text(
+                  'Mesafe: ${distance.toStringAsFixed(2)} km',
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Geçen Süre: $formattedTime',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildSummaryStat(String label, String value) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
-      padding: EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.teal[50],
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.teal[700],
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.teal[700],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummaryGraph() {
-    return Container(
-      height: 200,
-      child: Card(
-        elevation: 5,
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Text(
-              'Summary Graph Here',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[600],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMotivationalQuote() {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.teal[50],
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          '"Keep moving forward, one step at a time!"',
-          style: TextStyle(
-            fontSize: 18,
-            fontStyle: FontStyle.italic,
-            color: Colors.teal[700],
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
+  String _formatDuration(Duration duration) {
+    String ikiBasamak(int n) => n.toString().padLeft(2, '0');
+    String ikiBasamakDakika = ikiBasamak(duration.inMinutes.remainder(60));
+    String ikiBasamakSaniye = ikiBasamak(duration.inSeconds.remainder(60));
+    return "${ikiBasamak(duration.inHours)}:$ikiBasamakDakika:$ikiBasamakSaniye";
   }
 }

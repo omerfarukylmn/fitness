@@ -1,7 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../styles/styles.dart';
 
 class SignUpScreen extends StatelessWidget {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _surnameController = TextEditingController();
+
+  Future<void> _registerUser(BuildContext context) async {
+    // Kayıt bilgilerini doğrula
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty || _nameController.text.isEmpty || _surnameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lütfen tüm alanları doldurun.')),
+      );
+      return;
+    }
+
+    try {
+      // Firebase Authentication üzerinden kullanıcıyı kaydet
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      // Firestore'da kullanıcının bilgilerini kaydet
+      await _firestore.collection('users').doc(userCredential.user!.uid).set({
+        'email': _emailController.text,
+        'name': _nameController.text,
+        'surname': _surnameController.text,
+      });
+
+      // Başarılı kayıt sonrası login sayfasına yönlendirme
+      Navigator.pushReplacementNamed(context, '/login');
+    } catch (e) {
+      // Firebase hatalarını yönetme
+      String errorMessage = 'Kayıt sırasında bir hata oluştu.';
+      if (e is FirebaseAuthException) {
+        if (e.code == 'weak-password') {
+          errorMessage = 'Parola çok zayıf.';
+        } else if (e.code == 'email-already-in-use') {
+          errorMessage = 'Bu e-posta adresi zaten kullanılıyor.';
+        } else if (e.code == 'invalid-email') {
+          errorMessage = 'Geçersiz bir e-posta adresi girdiniz.';
+        }
+      }
+
+      print('Registration Error: $e');
+      // Hata mesajını kullanıcıya göster
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,21 +90,33 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 40),
                 TextField(
+                  controller: _emailController,
                   decoration: textFieldDecoration.copyWith(hintText: 'Email'),
                   style: TextStyle(color: textColor),
                   keyboardType: TextInputType.emailAddress,
                 ),
                 SizedBox(height: 20),
                 TextField(
+                  controller: _passwordController,
                   decoration: textFieldDecoration.copyWith(hintText: 'Password'),
                   style: TextStyle(color: textColor),
                   obscureText: true,
                 ),
                 SizedBox(height: 20),
+                TextField(
+                  controller: _nameController,
+                  decoration: textFieldDecoration.copyWith(hintText: 'Name'),
+                  style: TextStyle(color: textColor),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: _surnameController,
+                  decoration: textFieldDecoration.copyWith(hintText: 'Surname'),
+                  style: TextStyle(color: textColor),
+                ),
+                SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/login');
-                  },
+                  onPressed: () => _registerUser(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: buttonColor,
                     padding: EdgeInsets.symmetric(vertical: 16),

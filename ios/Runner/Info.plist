@@ -2,6 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>com.googleusercontent.apps.518496717289-eqkdiv7u8d4mufg1vnd1qfb65o1dis8q</string>
+        </array>
+    </dict>
+</array>
+<key>FirebaseAppDelegateProxyEnabled</key>
+<false/>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Bu uygulama konumunuzu takip etmek için gereklidir.</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>Bu uygulama konumunuzu takip etmek için gereklidir.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
