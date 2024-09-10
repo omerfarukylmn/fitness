@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 // ignore: must_be_immutable
 class ActivitySummaryScreen extends StatelessWidget {
-  late String activityId; // Firestore'dan veri almak için gerekli olan aktivite ID'si
-  late Duration elapsedTime; // Aktivite süresi
+  late String activityId; 
+  late Duration elapsedTime; 
 
   ActivitySummaryScreen({required this.activityId, required this.elapsedTime});
 

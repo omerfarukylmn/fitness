@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart'; // latlong2 kütüphanesi güncellenmiş
+import 'package:latlong2/latlong.dart'; 
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
@@ -84,7 +84,7 @@ class _ActivityMapScreenState extends State<ActivityMapScreen> {
     final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
-    final apiKey = 'YOUR_API_KEY'; // Replace with your OpenWeatherMap API key
+    final apiKey = 'YOUR_API_KEY'; 
     final url =
         'https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=$apiKey&units=metric';
     final response = await http.get(Uri.parse(url));

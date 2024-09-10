@@ -39,8 +39,8 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
       final docRef =
           await FirebaseFirestore.instance.collection('activities').add({
         'activity': widget.activity,
-        'distance': 0.0, // Başlangıçta mesafe 0.0
-        'elapsed_time': 0, // Başlangıçta süre 0
+        'distance': 0.0, 
+        'elapsed_time': 0, 
         'timestamp': Timestamp.now(),
       });
       setState(() {
@@ -80,12 +80,12 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
             _points.last.longitude,
           );
         }
-        // Firestore'da mesafeyi güncelle
+        
         FirebaseFirestore.instance
             .collection('activities')
             .doc(_activityId)
             .update({
-          'distance': _totalDistance / 1000, // km cinsinden
+          'distance': _totalDistance / 1000, 
         });
       });
     });
@@ -116,7 +116,7 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
   void _stopActivity() async {
     _timer?.cancel();
     await _saveActivityToFirestore();
-    // ActivitySummaryScreen'e geçiş yaparken
+   
     Navigator.pushNamed(
       context,
       '/activitySummary',

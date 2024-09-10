@@ -28,12 +28,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
       if (countdown == 0) {
         timer.cancel();
 
-        // Geri sayım bittiğinde yeni ekrana geçiş yapılıyor:
+        
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ActivityInProgressScreen(
-              activity: selectedActivity, // Seçilen aktiviteyi geçiriyoruz
+              activity: selectedActivity, 
             ),
           ),
         );
@@ -112,14 +112,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 SizedBox(height: 20),
                 if (countdown < 3)
                   Container(
-                    color: Colors.black, // Tam ekran için siyah arka plan
+                    color: Colors.black, 
                     child: Center(
                       child: Text(
                         '$countdown',
                         style: TextStyle(
                           fontSize: 80,
                           fontWeight: FontWeight.bold,
-                          color: Colors.red, // Geri sayım rengi
+                          color: Colors.red, 
                         ),
                       ),
                     ),
@@ -152,7 +152,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
             width: 2,
           ),
         ),
-        fixedSize: Size(140, 140), // Büyütülmüş kare şekli için sabit boyut
+        fixedSize: Size(140, 140), 
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

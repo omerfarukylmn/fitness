@@ -161,7 +161,7 @@ class LoginScreen extends StatelessWidget {
                     SocialButton(
                       imagePath: 'assets/apple.png',
                       onPressed: () {
-                        // Apple ile giriş işlemi (iOS için)
+                        // Apple ile giriş işlemi
                       },
                     ),
                   ],
