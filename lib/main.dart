@@ -10,7 +10,10 @@ import 'package:fitness/screens/activity_summary_screen/activity_summary_screen.
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    name: 'fitness',
+    options : const FirebaseOptions(apiKey: 'AIzaSyC6PlPJH0NhLAlAAlxcGrdhe1RQIqBaEn8', appId: '1:518496717289:ios:66885cca275590c8476378', messagingSenderId: '518496717289', projectId: 'basarsoft-d4b7b')
+  );
   runApp(MyApp());
 }
 

@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "518496717289",
+    "firebase_url": "https://basarsoft-d4b7b-default-rtdb.firebaseio.com",
+    "project_id": "basarsoft-d4b7b",
+    "storage_bucket": "basarsoft-d4b7b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518496717289:android:d2857eab655116ed476378",
+        "android_client_info": {
+          "package_name": "com.basarsoft.fitness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518496717289-cs5egct9o29c80r1vjqdmhq4vsgpovcc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwozWjW9Fmt1jR4jCucEMQztNMrtQDEIY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518496717289-cs5egct9o29c80r1vjqdmhq4vsgpovcc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "518496717289-eqkdiv7u8d4mufg1vnd1qfb65o1dis8q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitness"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518496717289:android:3de646115c268b6d476378",
+        "android_client_info": {
+          "package_name": "com.example.fitness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518496717289-cs5egct9o29c80r1vjqdmhq4vsgpovcc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwozWjW9Fmt1jR4jCucEMQztNMrtQDEIY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518496717289-cs5egct9o29c80r1vjqdmhq4vsgpovcc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "518496717289-eqkdiv7u8d4mufg1vnd1qfb65o1dis8q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitness"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
