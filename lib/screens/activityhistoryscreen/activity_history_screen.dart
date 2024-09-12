@@ -1,5 +1,8 @@
+import 'package:fitness/screens/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fitness/services/firestore_service.dart';
+import 'package:fitness/utils/formatters.dart';
 
 class ActivityHistoryScreen extends StatelessWidget {
   @override
@@ -10,10 +13,7 @@ class ActivityHistoryScreen extends StatelessWidget {
         backgroundColor: Colors.teal[600],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('activities')
-            .orderBy('timestamp', descending: true)
-            .snapshots(),
+        stream: FirestoreService.fetchActivityHistory(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -37,7 +37,7 @@ class ActivityHistoryScreen extends StatelessWidget {
               return ListTile(
                 title: Text(activityName),
                 subtitle: Text(
-                  'Distance: ${distance.toStringAsFixed(2)} km, Time: ${_formatDuration(formattedTime)}',
+                  'Distance: ${distance.toStringAsFixed(2)} km, Time: ${formatDuration(formattedTime)}',
                 ),
                 trailing: Icon(Icons.directions_run),
               );
@@ -46,12 +46,5 @@ class ActivityHistoryScreen extends StatelessWidget {
         },
       ),
     );
-  }
-
-  String _formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 }

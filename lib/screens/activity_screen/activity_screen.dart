@@ -1,6 +1,9 @@
+import 'package:fitness/screens/widgets/activity_button.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:fitness/screens/activity_in/activity_in_progress_screen.dart';
+import 'package:fitness/widgets/activity_button.dart';
+import 'package:fitness/utils/countdown_widget.dart';
 
 class ActivityScreen extends StatefulWidget {
   @override
@@ -27,13 +30,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (countdown == 0) {
         timer.cancel();
-
-        
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ActivityInProgressScreen(
-              activity: selectedActivity, 
+              activity: selectedActivity,
             ),
           ),
         );
@@ -84,10 +85,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   alignment: WrapAlignment.center,
                   runAlignment: WrapAlignment.center,
                   children: [
-                    _buildActivityButton('Running', Icons.directions_run),
-                    _buildActivityButton('Cycling', Icons.directions_bike),
-                    _buildActivityButton('Swimming', Icons.pool),
-                    _buildActivityButton('Walking', Icons.directions_walk),
+                    ActivityButton(activity: 'Running', icon: Icons.directions_run, isSelected: selectedActivity == 'Running', onSelect: () => _selectActivity('Running')),
+                    ActivityButton(activity: 'Cycling', icon: Icons.directions_bike, isSelected: selectedActivity == 'Cycling', onSelect: () => _selectActivity('Cycling')),
+                    ActivityButton(activity: 'Swimming', icon: Icons.pool, isSelected: selectedActivity == 'Swimming', onSelect: () => _selectActivity('Swimming')),
+                    ActivityButton(activity: 'Walking', icon: Icons.directions_walk, isSelected: selectedActivity == 'Walking', onSelect: () => _selectActivity('Walking')),
                   ],
                 ),
                 SizedBox(height: 30),
@@ -110,20 +111,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   ),
                 ),
                 SizedBox(height: 20),
-                if (countdown < 3)
-                  Container(
-                    color: Colors.black, 
-                    child: Center(
-                      child: Text(
-                        '$countdown',
-                        style: TextStyle(
-                          fontSize: 80,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red, 
-                        ),
-                      ),
-                    ),
-                  ),
+                CountdownWidget(countdown: countdown),
               ],
             ),
           ),
@@ -132,47 +120,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
-  Widget _buildActivityButton(String activity, IconData icon) {
-    return ElevatedButton(
-      onPressed: () {
-        setState(() {
-          selectedActivity = activity;
-        });
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor:
-            selectedActivity == activity ? Colors.green : Colors.grey[700],
-        padding: EdgeInsets.all(20),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0),
-          side: BorderSide(
-            color: selectedActivity == activity
-                ? Colors.greenAccent
-                : Colors.transparent,
-            width: 2,
-          ),
-        ),
-        fixedSize: Size(140, 140), 
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: Colors.white,
-            size: 40,
-          ),
-          SizedBox(height: 8),
-          Text(
-            activity,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
+  void _selectActivity(String activity) {
+    setState(() {
+      selectedActivity = activity;
+    });
   }
 }

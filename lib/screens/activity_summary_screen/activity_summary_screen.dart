@@ -1,30 +1,13 @@
+import 'package:fitness/screens/services/firestore_service.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fitness/services/firestore_service.dart';
+import 'package:fitness/utils/formatters.dart';
 
-// ignore: must_be_immutable
 class ActivitySummaryScreen extends StatelessWidget {
-  late String activityId; 
-  late Duration elapsedTime; 
+  final String activityId;
+  final Duration elapsedTime;
 
   ActivitySummaryScreen({required this.activityId, required this.elapsedTime});
-
-  Future<Map<String, dynamic>> _fetchActivityData() async {
-    try {
-      DocumentSnapshot doc = await FirebaseFirestore.instance
-          .collection('activities')
-          .doc(activityId)
-          .get();
-
-      if (doc.exists) {
-        return doc.data() as Map<String, dynamic>;
-      } else {
-        throw Exception('Aktivite bulunamadı');
-      }
-    } catch (e) {
-      print('Aktivite verileri alınırken hata oluştu: $e');
-      throw e;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +16,7 @@ class ActivitySummaryScreen extends StatelessWidget {
         title: Text('Aktivite Özeti'),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
-        future: _fetchActivityData(),
+        future: FirestoreService.fetchActivityData(activityId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -50,7 +33,7 @@ class ActivitySummaryScreen extends StatelessWidget {
           final data = snapshot.data!;
           final activity = data['activity'];
           final distance = data['distance'];
-          final formattedTime = _formatDuration(elapsedTime);
+          final formattedTime = formatDuration(elapsedTime);
 
           return Padding(
             padding: EdgeInsets.all(16.0),
@@ -77,12 +60,5 @@ class ActivitySummaryScreen extends StatelessWidget {
         },
       ),
     );
-  }
-
-  String _formatDuration(Duration duration) {
-    String ikiBasamak(int n) => n.toString().padLeft(2, '0');
-    String ikiBasamakDakika = ikiBasamak(duration.inMinutes.remainder(60));
-    String ikiBasamakSaniye = ikiBasamak(duration.inSeconds.remainder(60));
-    return "${ikiBasamak(duration.inHours)}:$ikiBasamakDakika:$ikiBasamakSaniye";
   }
 }

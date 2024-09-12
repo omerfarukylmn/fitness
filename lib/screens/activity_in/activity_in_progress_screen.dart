@@ -1,10 +1,15 @@
+import 'package:fitness/service/location_service.dart';
+import 'package:fitness/utils/formatters.dart';
+import 'package:fitness/widgets/map_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import '../widgets/map_widget.dart';
+import '../services/location_service.dart';
+import '../utils/formatters.dart';
 
 class ActivityInProgressScreen extends StatefulWidget {
   final String activity;
@@ -29,15 +34,23 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
   @override
   void initState() {
     super.initState();
-    _getCurrentPosition();
+    _initializeActivity();
+  }
+
+  Future<void> _initializeActivity() async {
+    _currentPosition = await LocationService.getCurrentPosition();
+    if (_currentPosition != null) {
+      setState(() {
+        _points.add(LatLng(_currentPosition!.latitude, _currentPosition!.longitude));
+      });
+    }
     _startTimer();
     _createActivityRecord();
   }
 
   Future<void> _createActivityRecord() async {
     try {
-      final docRef =
-          await FirebaseFirestore.instance.collection('activities').add({
+      final docRef = await FirebaseFirestore.instance.collection('activities').add({
         'activity': widget.activity,
         'distance': 0.0, 
         'elapsed_time': 0, 
@@ -51,46 +64,6 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
     }
   }
 
-  Future<void> _getCurrentPosition() async {
-    Position position = await Geolocator.getCurrentPosition(
-      locationSettings: AndroidSettings(
-        accuracy: LocationAccuracy.high,
-        distanceFilter: 10,
-      ),
-    );
-    setState(() {
-      _currentPosition = position;
-      _points.add(LatLng(position.latitude, position.longitude));
-    });
-
-    Geolocator.getPositionStream(
-      locationSettings: AndroidSettings(
-        accuracy: LocationAccuracy.high,
-        distanceFilter: 10,
-      ),
-    ).listen((Position newPosition) {
-      setState(() {
-        _currentPosition = newPosition;
-        _points.add(LatLng(newPosition.latitude, newPosition.longitude));
-        if (_points.length > 1) {
-          _totalDistance += Geolocator.distanceBetween(
-            _points[_points.length - 2].latitude,
-            _points[_points.length - 2].longitude,
-            _points.last.latitude,
-            _points.last.longitude,
-          );
-        }
-        
-        FirebaseFirestore.instance
-            .collection('activities')
-            .doc(_activityId)
-            .update({
-          'distance': _totalDistance / 1000, 
-        });
-      });
-    });
-  }
-
   void _startTimer() {
     _startTime = DateTime.now();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -102,10 +75,7 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
 
   Future<void> _saveActivityToFirestore() async {
     try {
-      await FirebaseFirestore.instance
-          .collection('activities')
-          .doc(_activityId)
-          .update({
+      await FirebaseFirestore.instance.collection('activities').doc(_activityId).update({
         'elapsed_time': _elapsedTime.inSeconds,
       });
     } catch (e) {
@@ -116,26 +86,14 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
   void _stopActivity() async {
     _timer?.cancel();
     await _saveActivityToFirestore();
-   
-    Navigator.pushNamed(
-      context,
-      '/activitySummary',
-      arguments: {
-        'activityId': 'geçerli_aktivite_id',
-        'elapsedTime': Duration(hours: 1, minutes: 30),
-      },
-    ).then((_) {
+    Navigator.pushNamed(context, '/activitySummary', arguments: {
+      'activityId': _activityId,
+      'elapsedTime': _elapsedTime,
+    }).then((_) {
       Future.delayed(Duration(seconds: 5), () {
         Navigator.pushReplacementNamed(context, '/activityHistory');
       });
     });
-  }
-
-  String _formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 
   @override
@@ -159,42 +117,10 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
       ),
       body: Stack(
         children: [
-          FlutterMap(
+          MapWidget(
             mapController: _mapController,
-            options: MapOptions(
-              center: _currentPosition != null
-                  ? LatLng(
-                      _currentPosition!.latitude, _currentPosition!.longitude)
-                  : LatLng(0, 0),
-              zoom: 15.0,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate:
-                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                subdomains: ['a', 'b', 'c'],
-              ),
-              PolylineLayer(
-                polylines: [
-                  Polyline(
-                    points: _points,
-                    strokeWidth: 4.0,
-                    color: Colors.blue,
-                  ),
-                ],
-              ),
-              MarkerLayer(
-                markers: _currentPosition != null
-                    ? [
-                        Marker(
-                          point: LatLng(_currentPosition!.latitude,
-                              _currentPosition!.longitude),
-                          child: Icon(Icons.location_on, color: Colors.red),
-                        ),
-                      ]
-                    : [],
-              ),
-            ],
+            points: _points,
+            currentPosition: _currentPosition,
           ),
           Positioned(
             bottom: 20,
@@ -213,7 +139,7 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Elapsed Time: ${_formatDuration(_elapsedTime)}',
+                  'Elapsed Time: ${formatDuration1(_elapsedTime)}',
                   style: TextStyle(fontSize: 20, color: Colors.black),
                 ),
                 SizedBox(height: 10),
