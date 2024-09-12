@@ -1,60 +1,16 @@
+import 'package:fitness/screens/widgets/text_field_input.dart';
+import 'package:fitness/service/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:fitness/services/auth_service.dart';
 import 'package:fitness/widgets/social_button.dart';
+import 'package:fitness/widgets/text_field_input.dart';
 
 class LoginScreen extends StatelessWidget {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-  // Kullanıcı e-posta ve şifre ile giriş yapmak için fonksiyon
-  Future<void> _signInWithEmailAndPassword(BuildContext context, String email, String password) async {
-    try {
-      // Firebase Authentication ile e-posta ve şifre kullanarak giriş yapma
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      Navigator.pushReplacementNamed(context, '/profile');
-    } catch (e) {
-      print('Email/Password Sign-In Error: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Giriş yapılamadı. Hata: $e')),
-      );
-    }
-  }
-
-  Future<void> _signInWithGoogle(BuildContext context) async {
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        // Kullanıcı giriş yapmayı iptal etti
-        return;
-      }
-
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      // Firebase ile kimlik doğrulaması
-      await _auth.signInWithCredential(credential);
-
-      // Başarılı giriş sonrası yönlendirme
-      Navigator.pushReplacementNamed(context, '/profile');
-    } catch (e) {
-      print('Google Sign-In Error: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Google ile giriş yapılamadı. Hata: $e')),
-      );
-    }
-  }
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _emailController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
-
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -89,49 +45,26 @@ class LoginScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 40),
                 // Email giriş alanı
-                TextField(
+                TextFieldInput(
                   controller: _emailController,
-                  decoration: InputDecoration(
-                    hintText: 'Email',
-                    hintStyle: TextStyle(
-                        color: Colors.white70,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 18),
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.45),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  style: TextStyle(color: Colors.white),
+                  hintText: 'Email',
                   keyboardType: TextInputType.emailAddress,
                 ),
                 SizedBox(height: 20),
                 // Şifre giriş alanı
-                TextField(
+                TextFieldInput(
                   controller: _passwordController,
-                  decoration: InputDecoration(
-                    hintText: 'Password',
-                    hintStyle: TextStyle(
-                        color: Colors.white70,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 18),
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.45),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  style: TextStyle(color: Colors.white),
+                  hintText: 'Password',
                   obscureText: true,
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    // E-posta ve şifre ile giriş fonksiyonunu çağırma
-                    _signInWithEmailAndPassword(context, _emailController.text, _passwordController.text);
+                    AuthService.signInWithEmailAndPassword(
+                      context,
+                      _emailController.text,
+                      _passwordController.text,
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 23, 128, 67),
@@ -155,7 +88,7 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     SocialButton(
                       imagePath: 'assets/gmaill.png',
-                      onPressed: () => _signInWithGoogle(context),
+                      onPressed: () => AuthService.signInWithGoogle(context),
                     ),
                     SizedBox(width: 20),
                     SocialButton(

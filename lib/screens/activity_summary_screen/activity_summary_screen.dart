@@ -1,4 +1,4 @@
-import 'package:fitness/screens/services/firestore_service.dart';
+import 'package:fitness/service/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:fitness/services/firestore_service.dart';
 import 'package:fitness/utils/formatters.dart';

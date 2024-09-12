@@ -1,6 +1,8 @@
+import 'package:fitness/screens/widgets/splash_content.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../styles/styles.dart';
+import '../../widgets/splash_content.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
+    // Belirli bir süre sonra giriş ekranına yönlendirme
     Timer(Duration(seconds: 3), () {
       Navigator.of(context).pushReplacementNamed('/login');
     });
@@ -22,21 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.directions_walk,
-              color: iconColor,
-              size: iconSize,
-            ),
-            SizedBox(height: 20),
-            Text(
-              'WalkTime',
-              style: titleTextStyle,
-            ),
-          ],
-        ),
+        child: SplashContent(),
       ),
     );
   }
