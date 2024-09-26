@@ -1,8 +1,7 @@
-import 'package:fitness/screens/widgets/action_button.dart';
-import 'package:fitness/screens/widgets/circular_stats.dart';
-import 'package:flutter/material.dart';
-import 'package:fitness/widgets/circular_stats.dart';
 import 'package:fitness/widgets/action_button.dart';
+import 'package:fitness/widgets/circular_stats.dart';
+import 'package:flutter/material.dart';
+
 
 class ProfileScreen extends StatelessWidget {
   final String userName;
@@ -10,7 +9,7 @@ class ProfileScreen extends StatelessWidget {
   final Duration totalTime;
   final int activityCount;
 
-  const ProfileScreen({
+  const ProfileScreen({super.key, 
     required this.userName,
     required this.totalDistance,
     required this.totalTime,
@@ -36,22 +35,22 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 Text(
                   'Welcome, $userName!',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 CircularStats(
                   totalDistance: totalDistance,
                   totalTime: totalTime,
                   activityCount: activityCount,
                 ),
-                Spacer(),
+                const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -59,7 +58,7 @@ class ProfileScreen extends StatelessWidget {
                     ActionButton(context: context, text: 'Activity History', route: '/activitySummary'),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             ),
           ),

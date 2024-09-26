@@ -1,25 +1,24 @@
 import 'package:fitness/service/firestore_service.dart';
 import 'package:flutter/material.dart';
-import 'package:fitness/services/firestore_service.dart';
 import 'package:fitness/utils/formatters.dart';
 
 class ActivitySummaryScreen extends StatelessWidget {
   final String activityId;
   final Duration elapsedTime;
 
-  ActivitySummaryScreen({required this.activityId, required this.elapsedTime});
+  const ActivitySummaryScreen({super.key, required this.activityId, required this.elapsedTime});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Aktivite Özeti'),
+        title: const Text('Aktivite Özeti'),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: FirestoreService.fetchActivityData(activityId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
@@ -27,7 +26,7 @@ class ActivitySummaryScreen extends StatelessWidget {
           }
 
           if (!snapshot.hasData || snapshot.data == null) {
-            return Center(child: Text('Veri mevcut değil'));
+            return const Center(child: Text('Veri mevcut değil'));
           }
 
           final data = snapshot.data!;
@@ -36,23 +35,23 @@ class ActivitySummaryScreen extends StatelessWidget {
           final formattedTime = formatDuration(elapsedTime);
 
           return Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Aktivite: $activity',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   'Mesafe: ${distance.toStringAsFixed(2)} km',
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   'Geçen Süre: $formattedTime',
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
               ],
             ),

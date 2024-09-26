@@ -4,7 +4,7 @@ class SocialButton extends StatelessWidget {
   final String imagePath;
   final VoidCallback onPressed;
 
-  const SocialButton({
+  const SocialButton({super.key, 
     required this.imagePath,
     required this.onPressed,
   });
@@ -15,8 +15,8 @@ class SocialButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.transparent,
-        shape: CircleBorder(),
-        padding: EdgeInsets.all(0),
+        shape: const CircleBorder(),
+        padding: const EdgeInsets.all(0),
         side: BorderSide.none,
       ),
       child: Image.asset(

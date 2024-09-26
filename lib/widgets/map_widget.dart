@@ -8,20 +8,20 @@ class MapWidget extends StatelessWidget {
   final List<LatLng> points;
   final Position? currentPosition;
 
-  MapWidget({required this.mapController, required this.points, required this.currentPosition});
+  const MapWidget({super.key, required this.mapController, required this.points, required this.currentPosition});
 
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
       mapController: mapController,
       options: MapOptions(
-        center: currentPosition != null ? LatLng(currentPosition!.latitude, currentPosition!.longitude) : LatLng(0, 0),
+        center: currentPosition != null ? LatLng(currentPosition!.latitude, currentPosition!.longitude) : const LatLng(0, 0),
         zoom: 15.0,
       ),
       children: [
         TileLayer(
           urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          subdomains: ['a', 'b', 'c'],
+          subdomains: const ['a', 'b', 'c'],
         ),
         PolylineLayer(
           polylines: [
@@ -37,7 +37,7 @@ class MapWidget extends StatelessWidget {
             markers: [
               Marker(
                 point: LatLng(currentPosition!.latitude, currentPosition!.longitude),
-                child: Icon(Icons.location_on, color: Colors.red),
+                child: const Icon(Icons.location_on, color: Colors.red),
               ),
             ],
           ),

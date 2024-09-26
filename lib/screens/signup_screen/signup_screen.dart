@@ -12,11 +12,13 @@ class SignUpScreen extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
 
+  SignUpScreen({super.key});
+
   Future<void> _registerUser(BuildContext context) async {
     // Kayıt bilgilerini doğrula
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty || _nameController.text.isEmpty || _surnameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Lütfen tüm alanları doldurun.')),
+        const SnackBar(content: Text('Lütfen tüm alanları doldurun.')),
       );
       return;
     }
@@ -77,49 +79,49 @@ class SignUpScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Icon(
+                const Icon(
                   Icons.directions_walk,
                   color: iconColor,
                   size: iconSize,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 const Text(
                   'WalkTime',
                   textAlign: TextAlign.center,
                   style: titleTextStyle,
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 TextField(
                   controller: _emailController,
                   decoration: textFieldDecoration.copyWith(hintText: 'Email'),
-                  style: TextStyle(color: textColor),
+                  style: const TextStyle(color: textColor),
                   keyboardType: TextInputType.emailAddress,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextField(
                   controller: _passwordController,
                   decoration: textFieldDecoration.copyWith(hintText: 'Password'),
-                  style: TextStyle(color: textColor),
+                  style: const TextStyle(color: textColor),
                   obscureText: true,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextField(
                   controller: _nameController,
                   decoration: textFieldDecoration.copyWith(hintText: 'Name'),
-                  style: TextStyle(color: textColor),
+                  style: const TextStyle(color: textColor),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextField(
                   controller: _surnameController,
                   decoration: textFieldDecoration.copyWith(hintText: 'Surname'),
-                  style: TextStyle(color: textColor),
+                  style: const TextStyle(color: textColor),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () => _registerUser(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: buttonColor,
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -129,7 +131,7 @@ class SignUpScreen extends StatelessWidget {
                     style: buttonTextStyle,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextButton(
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/login');

@@ -1,5 +1,5 @@
-import 'package:fitness/service/location_service.dart';
 import 'package:fitness/utils/formatters.dart';
+import 'package:fitness/service/location_service.dart';
 import 'package:fitness/widgets/map_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -7,14 +7,11 @@ import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../widgets/map_widget.dart';
-import '../services/location_service.dart';
-import '../utils/formatters.dart';
 
 class ActivityInProgressScreen extends StatefulWidget {
   final String activity;
 
-  ActivityInProgressScreen({required this.activity});
+  const ActivityInProgressScreen({super.key, required this.activity});
 
   @override
   _ActivityInProgressScreenState createState() =>
@@ -22,11 +19,11 @@ class ActivityInProgressScreen extends StatefulWidget {
 }
 
 class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
-  List<LatLng> _points = [];
+  final List<LatLng> _points = [];
   Position? _currentPosition;
   final MapController _mapController = MapController();
   Timer? _timer;
-  double _totalDistance = 0.0;
+  final double _totalDistance = 0.0;
   DateTime _startTime = DateTime.now();
   Duration _elapsedTime = Duration.zero;
   late String _activityId;
@@ -66,7 +63,7 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
 
   void _startTimer() {
     _startTime = DateTime.now();
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _elapsedTime = DateTime.now().difference(_startTime);
       });
@@ -90,7 +87,7 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
       'activityId': _activityId,
       'elapsedTime': _elapsedTime,
     }).then((_) {
-      Future.delayed(Duration(seconds: 5), () {
+      Future.delayed(const Duration(seconds: 5), () {
         Navigator.pushReplacementNamed(context, '/activityHistory');
       });
     });
@@ -109,7 +106,7 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
         title: Text('${widget.activity} Activity in Progress'),
         actions: [
           IconButton(
-            icon: Icon(Icons.stop),
+            icon: const Icon(Icons.stop),
             onPressed: _stopActivity,
             tooltip: 'Finish',
           ),
@@ -130,23 +127,23 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
               children: [
                 Text(
                   'Activity: ${widget.activity}',
-                  style: TextStyle(fontSize: 20, color: Colors.black),
+                  style: const TextStyle(fontSize: 20, color: Colors.black),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   'Total Distance: ${(_totalDistance / 1000).toStringAsFixed(2)} km',
-                  style: TextStyle(fontSize: 20, color: Colors.black),
+                  style: const TextStyle(fontSize: 20, color: Colors.black),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   'Elapsed Time: ${formatDuration1(_elapsedTime)}',
-                  style: TextStyle(fontSize: 20, color: Colors.black),
+                  style: const TextStyle(fontSize: 20, color: Colors.black),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   'Current Location: Lat: ${_currentPosition?.latitude.toStringAsFixed(5)}, '
                   'Lng: ${_currentPosition?.longitude.toStringAsFixed(5)}',
-                  style: TextStyle(fontSize: 20, color: Colors.black),
+                  style: const TextStyle(fontSize: 20, color: Colors.black),
                 ),
               ],
             ),
@@ -157,10 +154,10 @@ class _ActivityInProgressScreenState extends State<ActivityInProgressScreen> {
             child: ElevatedButton(
               onPressed: _stopActivity,
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                 backgroundColor: Colors.red,
               ),
-              child: Text(
+              child: const Text(
                 'Finish',
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),

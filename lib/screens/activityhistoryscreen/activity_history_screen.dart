@@ -1,26 +1,27 @@
 import 'package:fitness/service/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fitness/services/firestore_service.dart';
 import 'package:fitness/utils/formatters.dart';
 
 class ActivityHistoryScreen extends StatelessWidget {
+  const ActivityHistoryScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Activity History'),
+        title: const Text('Activity History'),
         backgroundColor: Colors.teal[600],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirestoreService.fetchActivityHistory(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No activities found.'));
+            return const Center(child: Text('No activities found.'));
           }
 
           final activities = snapshot.data!.docs;
@@ -39,7 +40,7 @@ class ActivityHistoryScreen extends StatelessWidget {
                 subtitle: Text(
                   'Distance: ${distance.toStringAsFixed(2)} km, Time: ${formatDuration(formattedTime)}',
                 ),
-                trailing: Icon(Icons.directions_run),
+                trailing: const Icon(Icons.directions_run),
               );
             },
           );

@@ -22,7 +22,7 @@ class FirestoreService {
       }
     } catch (e) {
       print('Error fetching activity data: $e');
-      throw e;
+      rethrow;
     }
   }
 }

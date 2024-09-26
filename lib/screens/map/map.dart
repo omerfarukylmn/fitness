@@ -8,13 +8,15 @@ import 'dart:convert';
 import 'dart:async';
 
 class ActivityMapScreen extends StatefulWidget {
+  const ActivityMapScreen({super.key});
+
   @override
   _ActivityMapScreenState createState() => _ActivityMapScreenState();
 }
 
 class _ActivityMapScreenState extends State<ActivityMapScreen> {
   final MapController _mapController = MapController();
-  List<LatLng> _points = [];
+  final List<LatLng> _points = [];
   Position? _currentPosition;
   bool _isTracking = false;
   Timer? _timer;
@@ -42,7 +44,7 @@ class _ActivityMapScreenState extends State<ActivityMapScreen> {
     });
 
     if (_isTracking) {
-      _timer = Timer.periodic(Duration(seconds: 2), (Timer timer) async {
+      _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) async {
         Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
         );
@@ -84,7 +86,7 @@ class _ActivityMapScreenState extends State<ActivityMapScreen> {
     final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
-    final apiKey = 'YOUR_API_KEY'; 
+    const apiKey = 'YOUR_API_KEY'; 
     final url =
         'https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=$apiKey&units=metric';
     final response = await http.get(Uri.parse(url));
@@ -125,19 +127,19 @@ class _ActivityMapScreenState extends State<ActivityMapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Activity Tracking'),
+        title: const Text('Activity Tracking'),
         backgroundColor: Colors.green,
       ),
       body: Stack(
         children: [
           FlutterMap(
             mapController: _mapController,
-            options: MapOptions(),
+            options: const MapOptions(),
             children: [
               TileLayer(
                 urlTemplate:
                     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                subdomains: ['a', 'b', 'c'],
+                subdomains: const ['a', 'b', 'c'],
               ),
               PolylineLayer(
                 polylines: [
@@ -165,14 +167,14 @@ class _ActivityMapScreenState extends State<ActivityMapScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Distance: ${_totalDistance.toStringAsFixed(2)} km',
-                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                    style: const TextStyle(color: Colors.white, fontSize: 16)),
                 Text(
                     'Elapsed Time: ${DateTime.now().difference(_startTime).inMinutes} min',
-                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                    style: const TextStyle(color: Colors.white, fontSize: 16)),
                 Text('Average Speed: ${_averageSpeed.toStringAsFixed(2)} km/h',
-                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                    style: const TextStyle(color: Colors.white, fontSize: 16)),
                 Text('Weather: $_weather',
-                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                    style: const TextStyle(color: Colors.white, fontSize: 16)),
               ],
             ),
           ),
@@ -183,15 +185,15 @@ class _ActivityMapScreenState extends State<ActivityMapScreen> {
               children: [
                 ElevatedButton(
                   onPressed: _startTracking,
-                  child: Text('Start'),
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                  child: Text('Start'),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: _stopTracking,
-                  child: Text('Stop'),
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  child: Text('Stop'),
                 ),
               ],
             ),

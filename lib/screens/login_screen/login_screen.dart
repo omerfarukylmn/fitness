@@ -1,13 +1,13 @@
-import 'package:fitness/screens/widgets/text_field_input.dart';
+import 'package:fitness/widgets/text_field_input.dart';
 import 'package:fitness/service/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fitness/services/auth_service.dart';
 import 'package:fitness/widgets/social_button.dart';
-import 'package:fitness/widgets/text_field_input.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
                   color: Colors.white,
                   size: 80,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 const Text(
                   'WalkTime',
                   textAlign: TextAlign.center,
@@ -43,21 +43,21 @@ class LoginScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 // Email giriş alanı
                 TextFieldInput(
                   controller: _emailController,
                   hintText: 'Email',
                   keyboardType: TextInputType.emailAddress,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 // Şifre giriş alanı
                 TextFieldInput(
                   controller: _passwordController,
                   hintText: 'Password',
                   obscureText: true,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     AuthService.signInWithEmailAndPassword(
@@ -68,7 +68,7 @@ class LoginScreen extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 23, 128, 67),
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -82,7 +82,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -90,7 +90,7 @@ class LoginScreen extends StatelessWidget {
                       imagePath: 'assets/gmaill.png',
                       onPressed: () => AuthService.signInWithGoogle(context),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     SocialButton(
                       imagePath: 'assets/apple.png',
                       onPressed: () {
@@ -99,7 +99,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/signup');

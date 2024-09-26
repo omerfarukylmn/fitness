@@ -18,6 +18,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,14 +27,14 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignUpScreen(),
-        '/profile': (context) => ProfileScreen(
+        '/profile': (context) => const ProfileScreen(
               userName: 'Ömer Faruk Yelman',
               totalDistance: 26.5,
               totalTime: Duration(hours: 2, minutes: 30),
               activityCount: 15,
             ),
         '/activity': (context) => ActivityScreen(),
-        '/activitySummary': (context) => ActivitySummaryScreen(activityId: 'activite_id', elapsedTime: Duration(hours: 1, minutes: 30)),
+        '/activitySummary': (context) => ActivitySummaryScreen(activityId: 'activite_id', elapsedTime: const Duration(hours: 1, minutes: 30)),
         '/activityHistory': (context) => ActivityHistoryScreen(),
       },
     );

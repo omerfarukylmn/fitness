@@ -1,11 +1,12 @@
-import 'package:fitness/screens/widgets/activity_button.dart';
+import 'package:fitness/widgets/activity_button.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:fitness/screens/activity_in/activity_in_progress_screen.dart';
-import 'package:fitness/widgets/activity_button.dart';
 import 'package:fitness/utils/countdown_widget.dart';
 
 class ActivityScreen extends StatefulWidget {
+  const ActivityScreen({super.key});
+
   @override
   _ActivityScreenState createState() => _ActivityScreenState();
 }
@@ -18,7 +19,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
   void _startActivity() {
     if (selectedActivity.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select an activity')),
+        const SnackBar(content: Text('Please select an activity')),
       );
       return;
     }
@@ -27,7 +28,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
       countdown = 3;
     });
 
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (countdown == 0) {
         timer.cancel();
         Navigator.push(
@@ -70,7 +71,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Select an activity:',
                   style: TextStyle(
                     fontSize: 24,
@@ -78,7 +79,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Wrap(
                   spacing: 20,
                   runSpacing: 20,
@@ -91,17 +92,17 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ActivityButton(activity: 'Walking', icon: Icons.directions_walk, isSelected: selectedActivity == 'Walking', onSelect: () => _selectActivity('Walking')),
                   ],
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: _startActivity,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Start Activity',
                     style: TextStyle(
                       fontSize: 20,
@@ -110,7 +111,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 CountdownWidget(countdown: countdown),
               ],
             ),

@@ -1,10 +1,12 @@
-import 'package:fitness/screens/widgets/splash_content.dart';
+import 'package:fitness/widgets/splash_content.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../styles/styles.dart';
-import '../../widgets/splash_content.dart';
+
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -15,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     // Belirli bir süre sonra giriş ekranına yönlendirme
-    Timer(Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacementNamed('/login');
     });
   }
